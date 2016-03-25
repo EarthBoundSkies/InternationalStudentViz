@@ -41,10 +41,13 @@
 
 
     var viewer = new Cesium.Viewer('cesiumContainer', {
-      baseLayerPicker : false,
-      timeline : false,
-      skyAtsmophere : false,
-      globe : false
+        baseLayerPicker : false,
+        timeline : false,
+        skyAtsmophere : false,
+        globe : false,
+        animation : false,
+        geocoder : false
+        
     });
 
 
@@ -68,7 +71,7 @@
 
           var entity = entities[i];
 
-          var name = entity.ISO3;
+          var name = entity.properties.ISO3;
 
           
 
@@ -80,38 +83,39 @@
                   color = Cesium.Color.fromBytes(105,105,105);
                   height = 40000;
 
-                  } else if (entity.properties.Students_2 > 0 && entity.properties.Students_2 <= 2) {
+                  } else if (entity.properties.Students_2 > 0 && entity.properties.Students_2 <= 5) {
 
                       color = Cesium.Color.fromCssColorString('#808080');
                       
+                      
 
-                  } else if (entity.properties.Students_2 > 2 && entity.properties.Students_2 <= 6) {
+                  } else if (entity.properties.Students_2 > 5 && entity.properties.Students_2 <= 10) {
 
                       color = Cesium.Color.fromCssColorString('#768088');
                       
                   
-                  } else if (entity.properties.Students_2 > 7 && entity.properties.Students_2 <= 10) {
-
-                      color = Cesium.Color.fromCssColorString('#6C8091');
-                      
-                  
-                  } else if (entity.properties.Students_2 > 11 && entity.properties.Students_2 <= 15) {
+                  } else if (entity.properties.Students_2 > 10 && entity.properties.Students_2 <= 20) {
 
                       color = Cesium.Color.fromCssColorString('#63819A');
                       
                   
-                  } else if (entity.properties.Students_2 > 16 && entity.properties.Students_2 <= 38) {
-
-                      color = Cesium.Color.fromCssColorString('#5981A2');
-                      
-                  
-                  } else if (entity.properties.Students_2 > 38 && entity.properties.Students_2 <= 86) {
+                  } else if (entity.properties.Students_2 > 20 && entity.properties.Students_2 <= 40) {
 
                       color = Cesium.Color.fromCssColorString('#4F81AB');
                       
                   
-                  } else {
+                  } else if (entity.properties.Students_2 > 40 && entity.properties.Students_2 <= 80) {
+
+                      color = Cesium.Color.fromCssColorString('#5981A2');
+                      
+                  
+                  } else if (entity.properties.Students_2 > 80 && entity.properties.Students_2 <= 160) {
+
                       color = Cesium.Color.fromCssColorString('#4682B4');
+                      
+                  
+                  } else {
+                      color = Cesium.Color.RED;
                       
                   
                 }
@@ -134,7 +138,7 @@
           
           entity.polygon.extrudedHeight = height;
 
-          entity.label
+            entity.description = ['There were ' + entity.properties.Students_2 + ' Students from ' + entity.properties.NAME + ' attending Old Dominion in 2013'];
 
         }
           

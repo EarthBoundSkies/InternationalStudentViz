@@ -4,41 +4,159 @@
 
 <head>
 
-  <!-- Use correct character set. -->
-  <meta charset="utf-8">
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
 
-  <!-- Tell IE to use the latest, best version. -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
 
-  <title>ODU Geo-Vis: Intl. Students</title>
+    <title>ODU Geo-Vis: Intl. Students</title>
 
-  <script src="http://cesiumjs.org/releases/1.19/Build/Cesium/Cesium.js"></script>
+    <script src="http://cesiumjs.org/releases/1.19/Build/Cesium/Cesium.js"></script>
+    
+    <link name ="Stylee" rel="stylesheet" href="Stylee.css">
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
-  <style>
+    <!-- Latest compiled JavaScript -->
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    
+    <!-- Color Scaling Script -->
 
-      @import url(http://cesiumjs.org/releases/1.19/Build/Cesium/Widgets/widgets.css);
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/1.1.1/chroma.min.js"></script>
+    
+    
+    
 
-      html, body, #cesiumContainer {
-          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
-      }
+    
+    
+    <style>
+        
+        
+        @import url(http://cesiumjs.org/releases/1.19/Build/Cesium/Widgets/widgets.css);
 
-  </style>
+
+          html, body, #cesiumContainer {
+              position: fixed;
+              top: 0;
+              width: 100%; 
+              height: 100%; 
+              margin: 0; 
+              padding: 0; 
+              overflow: hidden;
+              z-index: -1;
+          }
+        
+
+
+        
+        
+        
+
+
+    </style>
+    
+    <link rel="icon" type="image/png" href="Geovis_v4.png" sizes="96x96">
+        <link rel="image" type="image/png" href="ODU_monarch_logo.png">
+
 
 </head>
 
-<body>
+<body onload="displayData();">
+    
 
-  <div id="cesiumContainer"></div>
-  <div id="loadingOverlay"><h1>Loading...</h1></div>
-  <div id="toolbar"></div>
 
-  <script type = "text/javascript">
+ <nav class="navbar navbar-fixed-left navbar-minimal animate" role="navigation">
+		<div class="navbar-toggler animate">
+			<span class="menu-icon"></span>
+		</div>
+		<ul class="navbar-menu animate">
+			<li>
+				<a href="http://www.odu.edu/" target="_blank" class="animate">
+					<span class="desc animate">Old Dominion University</span>
+					<img src="ODUlogo.png" width="75" height="75" z-index="1000">
+                    
+				</a>
+			</li>
+            <li>
+				<a href="https://online.odu.edu/" target="_blank" class="animate">
+					<span class="desc animate">Old Dominion University - Distance Learning</span>
+					<img src="OduOnlineLogoedit.png" width="75" height="75" z-index="1000">
+                    
+				</a>
+			</li>
+			<li>
+				<a href="https://www.odu.edu/facultystaff/research/resources/computing/gis" target="_blank" class="animate">
+					<span class="desc animate">Old Dominion University - Center for Geospatial & Visualization Computing</span>
+					<img src="Geovis_v4.png" width="75" height="75" z-index="1000">
+				</a>
+			</li>
+			<li>
+				<a href="https://cesiumjs.org/index.html" target="_blank" class="animate">
+					<span class="desc animate">Cesium.js</span>
+					<img src="CesiumEdit.png" width="75" height="75" z-index="1000">
+				</a>
+			</li>
+		</ul>
+	</nav>
 
+    
+    <div id="cesiumContainer"></div>
+    <div id="infoContainer"></div>
+    
+
+    <div class="radioContainer">
+        <h2>Academic Year:</h2>
+        <ul>
+        <li>   
+            <input type="radio" id="2013" onclick="displayData();" name="datayear" value=2013 checked="checked">
+            
+            <label for="2013">2013</label>
+            
+            <div class="check"></div>
+            
+        </li>
+        <li>
+            <input type="radio" id="2014" onclick="displayData();" name="datayear" value=2014>
+            
+            <label for="2014">2014</label>
+            
+            <div class="check"></div>
+        </li>
+        <li>  
+            <input type="radio" id="2015" onclick="displayData();" name="datayear" value=2015>
+            
+            <label for="2015">2015</label>
+            
+            <div class="check"></div>
+            
+        </li> 
+        </ul>
+    </div>
+    
+    
+    
+ 
+        
+<script type = "text/javascript">
+    
+
+        
+        $('.navbar-toggler').on('click', function(event) {
+        event.preventDefault();
+        $(this).closest('.navbar-minimal').toggleClass('open');
+        })
+        
+        
+ 
+   
 
     var viewer = new Cesium.Viewer('cesiumContainer', {
         baseLayerPicker : false,
@@ -46,110 +164,171 @@
         skyAtsmophere : false,
         globe : false,
         animation : false,
-        geocoder : false
-        
+        geocoder : false,
+        vrButton : true
     });
+    
+    
+//   var dBox = new Cesium.InfoBox("infoContainer");
+    
+//    console.log(dBox);
+    
+    
+ setTimeout(function(){
+          var cssLink = document.createElement("link");
+          cssLink.href= 'Stylee.css';
+
+          cssLink.rel = "stylesheet";
+          cssLink.type = "text/css";
+          viewer.infoBox.frame.contentDocument.head.appendChild(cssLink);
+    },5000);
+    
+    
+    
+    
+
+    
+        
+function displayData() {
+    
+    
+
+var radioYears = document.getElementsByName('datayear');
+    
+    
+    
+    for(var b = 0; b< radioYears.length; b++)
+    if(radioYears[b].checked) {
+        dataset = radioYears[b].value;
+    
+    break;
+    }
+
+
+
+
+viewer.dataSources.removeAll();
+            
 
 
     var promise = Cesium.GeoJsonDataSource.load('CountriesShapefileConversion.json');
+    
 
+
+    
+    
     promise.then(function(dataSource) {
 
       viewer.dataSources.add(dataSource); 
 
-        
 
         //Get the array of entities
         var entities = dataSource.entities.values;
+        
 
 
 
         
-
-
+        
         for (var i = 0; i < entities.length; i++) {
 
-          var entity = entities[i];
+            var entity = entities[i];
 
-          var name = entity.properties.ISO3;
-
-          
-
-          
+            var name = entity.properties.ISO3;
+            
+            
             
 
-              if (entity.properties.Students_2 == 0) {
-
-                  color = Cesium.Color.fromBytes(105,105,105);
-                  height = 40000;
-
-                  } else if (entity.properties.Students_2 > 0 && entity.properties.Students_2 <= 5) {
-
-                      color = Cesium.Color.fromCssColorString('#808080');
-                      
-                      
-
-                  } else if (entity.properties.Students_2 > 5 && entity.properties.Students_2 <= 10) {
-
-                      color = Cesium.Color.fromCssColorString('#768088');
-                      
-                  
-                  } else if (entity.properties.Students_2 > 10 && entity.properties.Students_2 <= 20) {
-
-                      color = Cesium.Color.fromCssColorString('#63819A');
-                      
-                  
-                  } else if (entity.properties.Students_2 > 20 && entity.properties.Students_2 <= 40) {
-
-                      color = Cesium.Color.fromCssColorString('#4F81AB');
-                      
-                  
-                  } else if (entity.properties.Students_2 > 40 && entity.properties.Students_2 <= 80) {
-
-                      color = Cesium.Color.fromCssColorString('#5981A2');
-                      
-                  
-                  } else if (entity.properties.Students_2 > 80 && entity.properties.Students_2 <= 160) {
-
-                      color = Cesium.Color.fromCssColorString('#4682B4');
-                      
-                  
-                  } else {
-                      color = Cesium.Color.RED;
-                      
-                  
-                }
+            
+            
+            if (dataset === '2013'){
+                especial = entity.properties.Students_2; 
+                
+            } else if (dataset === '2014'){
+                especial = entity.properties.Students_3; 
+            } else {
+                especial = entity.properties.Students_4;
+            } 
+                
+            
 
 
-              if (entity.properties.Students_2 == 0) {
+              if (especial == 0) {
 
                 height = 50000;
+                  
 
-              } else { 
+                } else { 
 
-                height = 50000 + ((entity.properties.Students_2 / 155) * 950000);
+                height = 75000 + ((especial / 155) * 950000);
+                    
               } 
+            
+            
+            
+            
+              if (entity.properties.NAME == 'United States') {
 
-          entity.polygon.material = color;
+                entity.description = 'The United States is home to Old Dominion University: Located in the City of Norfolk, Virginia - Old Dominion University is a dynamic public research institution that serves its students and enriches the Commonwealth of Virginia, the nation and the world through rigorous academic programs, strategic partnerships, and active civic engagement.';
+                  
+                 
+                  
+              } else if (especial === 0) {
+                  
+                  entity.description = 
+                      
+                      'There were no distance learning students from ' + entity.properties.NAME + ' attending Old Dominion University in the ' + String(dataset) + ' academic year.';
+                  
+              } else if (especial ===1) {
+                  
+                  entity.description = ['There was ' + String(especial) + ' distance learning student from ' + entity.properties.NAME + ' attending Old Dominion University in the ' + String(dataset) + ' academic year.'];
 
+                } else { 
+
+                entity.description = ['There were ' + String(especial) + ' distance learning students from ' + entity.properties.NAME + ' attending Old Dominion University in the ' + String(dataset) + ' academic year.'];
+              } 
+        
+            
+            var scale = chroma.scale(['#426a8a','#4785b8']).domain([1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]);
+            
+            if (especial === 0) { 
+                ecolor = '#6d7378';
+            } else {
+            ecolor = scale(especial).hex();
+            }
+            
+
+          entity.polygon.material = Cesium.Color.fromCssColorString(ecolor); 
+            
+          entity.polygon.extrudedHeight = height;
+            
+            
+            
+        
 
           //Remove the outlines.
           entity.polygon.outline = false;
-          
-          entity.polygon.extrudedHeight = height;
-
-          entity.description = ['There were ' + entity.properties.Students_2 + ' international students from ' + entity.properties.NAME + ' attending Old Dominion in 2013'];
 
         }
-          
-          
-          
-
-            
+            viewer.cesiumWidget.creditContainer.parentElement.style.display = 'none'; 
         
-    });
+        
+           
+    }) ;
 
-  </script>
+  
+       
+
+}
+
+        
+    
+
+
+    
+
+</script>
+    
 
 
 </body>

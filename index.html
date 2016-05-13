@@ -171,7 +171,7 @@
         viewer.dataSources.removeAll();
             
         // Loads Geojson polygons after the .then function is completed
-        var promise = Cesium.GeoJsonDataSource.load('CountriesShapefileConversion.json');
+        var promise = Cesium.GeoJsonDataSource.load('InternationalStudentCount.json');
         
         // Sets up viewer to add datasource after .then is complete
         promise.then(function(dataSource) {
@@ -187,11 +187,11 @@
                 
                 // Gets the correct student count corresponding to the chosen data year from the dataset based on the checked radio button     
                 if (dataset === '2013'){
-                    studentCnt = entity.properties.Students_2; 
+                    studentCnt = entity.properties.Count2013; 
                 } else if (dataset === '2014'){
-                    studentCnt = entity.properties.Students_3; 
+                    studentCnt = entity.properties.Count2014; 
                 } else {
-                    studentCnt = entity.properties.Students_4;
+                    studentCnt = entity.properties.Count2015;
                 };
                 
                 // As height is in meters, extrusion must be multiplied by a factor in order to be noticable - set base thickness of extrusion as 50,000 m (w/ 0 students) 
@@ -207,7 +207,7 @@
             
                 // Loop sets onclick descriptions of individual countries
                 if (entity.properties.NAME == 'United States') {
-                    entity.description = 'The United States is home to Old Dominion University: Located in the City of Norfolk, Virginia - Old Dominion University is a dynamic public research institution that serves its students and enriches the Commonwealth of Virginia, the nation and the world through rigorous academic programs, strategic partnerships, and active civic engagement.';
+                    entity.description = ['The United States is home to Old Dominion University: Located in the City of Norfolk, Virginia - Old Dominion University is a dynamic public research institution that serves its students and enriches the Commonwealth of Virginia, the nation and the world through rigorous academic programs, strategic partnerships, and active civic engagement.'];
                 } else if (studentCnt === 0) {
                     entity.description = 'There were no distance learning students from ' + entity.properties.NAME + ' attending Old Dominion University in the ' + String(dataset) + ' academic year.';
                 } else if (studentCnt ===1) {
